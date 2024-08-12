@@ -1,3 +1,5 @@
+// App.js
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Banner from './components/Banner';
@@ -10,12 +12,12 @@ const App = () => {
         link: ''
     });
     const [isVisible, setIsVisible] = useState(true);
+    const [loading, setLoading] = useState(false); // Add loading state here
 
     useEffect(() => {
         fetch('https://takeuforward-7mh2.onrender.com/banner')
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 setBannerSettings({
                     description: data.description,
                     timer: data.timer,
@@ -36,25 +38,35 @@ const App = () => {
 
     useEffect(() => {
         localStorage.setItem('bannerVisibility', JSON.stringify(isVisible));
-        console.log(isVisible)
+        console.log(isVisible);
     }, [isVisible]);
 
-    const updateBannerSettings = (newSettings) => {
-        setBannerSettings(prevSettings => ({
-            ...prevSettings,
-            ...newSettings,
-        }));
+    const updateBannerSettings = async (newSettings) => {
+        setLoading(true); // Set loading to true when starting the update
+        try {
+            const response = await fetch('https://takeuforward-7mh2.onrender.com/banner', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newSettings),
+            });
 
-        fetch('https://takeuforward-7mh2.onrender.com/banner', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newSettings),
-        })
-            .then(response => response.text())
-            .then(message => console.log(message))
-            .catch(error => console.error('Error updating banner data:', error));
+            if (!response.ok) {
+                throw new Error('Failed to update banner data');
+            }
+
+            const message = await response.text();
+            console.log(message);
+            setBannerSettings(prevSettings => ({
+                ...prevSettings,
+                ...newSettings,
+            }));
+        } catch (error) {
+            console.error('Error updating banner data:', error);
+        } finally {
+            setLoading(false); // Set loading to false after the update is complete
+        }
     };
 
     return (
@@ -68,12 +80,20 @@ const App = () => {
                             setBannerSettings={setBannerSettings}
                             isVisible={isVisible}
                             setIsVisible={setIsVisible}
+                            loading={loading} // Pass loading state to Banner
                         />
                     }
                 />
                 <Route
                     path="/dashboard"
-                    element={<Dashboard updateBannerSettings={updateBannerSettings} isVisible={isVisible} setIsVisible={setIsVisible} />}
+                    element={
+                        <Dashboard 
+                            updateBannerSettings={updateBannerSettings} 
+                            isVisible={isVisible} 
+                            setIsVisible={setIsVisible} 
+                            loading={loading} // Pass loading state to Dashboard
+                        />
+                    }
                 />
             </Routes>
         </Router>

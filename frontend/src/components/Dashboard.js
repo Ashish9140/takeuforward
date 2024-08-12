@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible }) => {
+const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible, loading }) => {
     const [description, setDescription] = useState('');
     const [days, setDays] = useState(0);
     const [hours, setHours] = useState(0);
@@ -9,18 +9,25 @@ const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible }) => {
     const [seconds, setSeconds] = useState(0);
     const [link, setLink] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
+    const resetSuccessMessage = () => {
+        setTimeout(() => {
+            setSuccessMessage('');
+        }, 3000);
+    };
+
     const handleUpdateDescription = async () => {
-        updateBannerSettings({ description });
+        await updateBannerSettings({ description });
         setSuccessMessage('Description updated successfully!');
+        setDescription('');
         resetSuccessMessage();
     };
 
     const handleUpdateLink = async () => {
-        updateBannerSettings({ link });
+        await updateBannerSettings({ link });
         setSuccessMessage('Link updated successfully!');
+        setLink('');
         resetSuccessMessage();
     };
 
@@ -36,16 +43,14 @@ const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible }) => {
         }
 
         const totalWithDays = totalSeconds + Number(days) * 86400;
-        updateBannerSettings({ timer: totalWithDays });
+        await updateBannerSettings({ timer: totalWithDays });
         setSuccessMessage('Timer updated successfully!');
-        resetSuccessMessage(); 
+        setDays(0);
+        setHours(0);
+        setMinutes(0);
+        setSeconds(0);
+        resetSuccessMessage();
         setError('');
-    };
-
-    const resetSuccessMessage = () => {
-        setTimeout(() => {
-            setSuccessMessage('');
-        }, 3000);
     };
 
     const handleHoursChange = (e) => {
@@ -67,7 +72,7 @@ const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible }) => {
         <div className="admin-dashboard">
             <h2>Dashboard</h2>
 
-            {loading && <p>Loading...</p>} 
+            {loading && <p>Loading...</p>}
             {successMessage && <p className="success">{successMessage}</p>}
 
             <div className="dashboard-section">
