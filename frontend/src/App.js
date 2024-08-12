@@ -12,7 +12,7 @@ const App = () => {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:8000/banner')
+        fetch('https://takeuforward-7mh2.onrender.com/banner')
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -45,7 +45,7 @@ const App = () => {
             ...newSettings,
         }));
 
-        fetch('http://localhost:8000/banner', {
+        fetch('https://takeuforward-7mh2.onrender.com/banner', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
