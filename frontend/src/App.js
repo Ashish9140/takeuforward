@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Banner from './components/Banner';
@@ -12,7 +10,7 @@ const App = () => {
         link: ''
     });
     const [isVisible, setIsVisible] = useState(true);
-    const [loading, setLoading] = useState(false); // Add loading state here
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetch('https://takeuforward-7mh2.onrender.com/banner')
@@ -32,7 +30,8 @@ const App = () => {
         if (savedVisibility !== null) {
             setIsVisible(JSON.parse(savedVisibility));
         } else {
-            localStorage.setItem('bannerVisibility', JSON.stringify(true));
+            setIsVisible(true); // Set to true if there's no saved value
+            localStorage.setItem('bannerVisibility', JSON.stringify(true)); // Save the default value
         }
     }, []);
 
@@ -42,7 +41,7 @@ const App = () => {
     }, [isVisible]);
 
     const updateBannerSettings = async (newSettings) => {
-        setLoading(true); // Set loading to true when starting the update
+        setLoading(true);
         try {
             const response = await fetch('https://takeuforward-7mh2.onrender.com/banner', {
                 method: 'PUT',
@@ -65,7 +64,7 @@ const App = () => {
         } catch (error) {
             console.error('Error updating banner data:', error);
         } finally {
-            setLoading(false); // Set loading to false after the update is complete
+            setLoading(false);
         }
     };
 
@@ -80,7 +79,7 @@ const App = () => {
                             setBannerSettings={setBannerSettings}
                             isVisible={isVisible}
                             setIsVisible={setIsVisible}
-                            loading={loading} // Pass loading state to Banner
+                            loading={loading} 
                         />
                     }
                 />
@@ -91,7 +90,7 @@ const App = () => {
                             updateBannerSettings={updateBannerSettings} 
                             isVisible={isVisible} 
                             setIsVisible={setIsVisible} 
-                            loading={loading} // Pass loading state to Dashboard
+                            loading={loading} 
                         />
                     }
                 />
