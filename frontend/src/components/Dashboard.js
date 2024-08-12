@@ -70,10 +70,11 @@ const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible, loading }) =
 
     return (
         <div className="admin-dashboard">
-            <h2>Dashboard</h2>
+            <h2>Dashboard <Link to="/" className='go-to-banner'>(Go to Banner)</Link></h2>
 
             {loading && <p>Loading...</p>}
             {successMessage && <p className="success">{successMessage}</p>}
+        
 
             <div className="dashboard-section">
                 <h3>Update Banner Description</h3>
@@ -156,10 +157,6 @@ const Dashboard = ({ updateBannerSettings, isVisible, setIsVisible, loading }) =
                     />
                     Show Banner
                 </label>
-            </div>
-
-            <div className="dashboard-section">
-                <Link to="/">Go to Banner</Link>
             </div>
         </div>
     );
