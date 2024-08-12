@@ -4,9 +4,9 @@ const mysql = require('mysql2');
 const cors = require("cors");
 
 const app = express();
-const port = process.env.PORT || 8000; 
+const port = process.env.PORT || 8000;
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(cors());
 
 const db = mysql.createConnection({
@@ -41,6 +41,10 @@ db.query(createBannerTable, (err, results) => {
         console.log('Banner table is ready');
     }
 });
+
+app.get("/", (req, res) => {
+    res.json({ message: "Take u forward server" });
+})
 
 app.get('/banner', (req, res) => {
     db.query('SELECT * FROM banner WHERE id = 1', (err, results) => {
