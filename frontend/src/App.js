@@ -13,7 +13,7 @@ const App = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetch('https://takeuforward-production-2bdb.up.railway.app/banner')
+        fetch('https://takeuforward-7mh2.onrender.com/banner/banner')
             .then(response => response.json())
             .then(data => {
                 setBannerSettings({
@@ -43,7 +43,7 @@ const App = () => {
     const updateBannerSettings = async (newSettings) => {
         setLoading(true);
         try {
-            const response = await fetch('https://takeuforward-production-2bdb.up.railway.app/banner', {
+            const response = await fetch('https://takeuforward-7mh2.onrender.com/banner/banner', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
